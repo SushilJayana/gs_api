@@ -34,17 +34,17 @@ router.post("/member/add", verify, async (req, res) => {
 
   //Hash passwords
   const salt = await bcryptjs.genSalt(10);
-  const hashPassword = await bcryptjs.hash(req.body.password, salt);
+  const hashPassword = await bcryptjs.hash((req.body.password).trim(), salt);
 
   if (isUsernameExist) return res.json({ message: "Username already exist" });
 
   const member = new Member({
-    username: req.body.username,
-    firstname: req.body.firstname,
-    lastname: req.body.lastname,
-    user_type: req.body.user_type,
-    created_by: req.body.created_by,
-    password: hashPassword,
+    username: (req.body.username).trim(),
+    firstname: (req.body.firstname).trim(),
+    lastname: (req.body.lastname).trim(),
+    user_type: (req.body.user_type).trim(),
+    created_by: (req.body.created_by).trim(),
+    password: hashPassword.trim(),
     password_hash: salt
   });
 
@@ -57,7 +57,7 @@ router.post("/member/add", verify, async (req, res) => {
 });
 
 //DELETE A MEMBER
-router.delete("/member/remove/:id", verify, async (req, res) => {
+router.delete("/member/remove/:id", async (req, res) => {
   try {
     const removedMember = await Member.remove({ _id: req.params.id });
     res.json(removedMember);
@@ -69,9 +69,29 @@ router.delete("/member/remove/:id", verify, async (req, res) => {
 //UPDATE A MEMBER
 router.put("/member/update/:id", verify, async (req, res) => {
   try {
+
+    let updateData = {
+      username: (req.body.username).trim(),
+      firstname: (req.body.firstname).trim(),
+      lastname: (req.body.lastname).trim(),
+      user_type: (req.body.user_type).trim(),
+      joined_date: (req.body.joined_date).trim(),
+    }
+
+    if (req.body.password) {
+
+      //Hash passwords
+      const salt = await bcryptjs.genSalt(10);
+      const hashPassword = await bcryptjs.hash((req.body.password).trim(), salt);
+      updateData.password = hashPassword;
+      updateData.password_hash = salt;
+    }
+
     const updatedMember = await Member.updateOne(
       { _id: req.params.id },
-      { $set: { firstname: req.params.firstname } }
+      {
+        $set: updateData
+      }
     );
     res.json(updatedMember);
   } catch (err) {
