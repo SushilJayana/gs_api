@@ -7,7 +7,7 @@ const bcryptjs = require("bcryptjs");
 //GET ALL MEMBER
 router.get("/member", async (req, res) => {
   try {
-    const members = await Member.find();
+    const members = await Member.find().select('-password -password_hash');
     res.json(members);
   } catch (err) {
     res.json({ message: err.message });
@@ -16,7 +16,7 @@ router.get("/member", async (req, res) => {
 //GET MEMBER BY ID
 router.get("/member/:id", async (req, res) => {
   try {
-    const member = await Member.findById(req.params.id);
+    const member = await Member.findById(req.params.id).select('-password -password_hash');
     res.json(member);
   } catch (err) {
     res.json({ message: err.message });
@@ -43,14 +43,16 @@ router.post("/member/add", verify, async (req, res) => {
     firstname: (req.body.firstname).trim(),
     lastname: (req.body.lastname).trim(),
     user_type: (req.body.user_type).trim(),
-    created_by: (req.body.created_by).trim(),
+    created_by: req.body.created_by,
     password: hashPassword.trim(),
     password_hash: salt
   });
 
   try {
     const saveMember = await member.save();
-    res.send({ id: saveMember._id, username: saveMember.username });
+    saveMember.password = null;
+    saveMember.password_hash = null;
+    res.send(saveMember);
   } catch (err) {
     res.json({ message: err.message });
   }
@@ -74,7 +76,7 @@ router.put("/member/update/:id", verify, async (req, res) => {
       username: (req.body.username).trim(),
       firstname: (req.body.firstname).trim(),
       lastname: (req.body.lastname).trim(),
-      user_type: (req.body.user_type).trim(),
+      user_type: req.body.user_type,
       joined_date: (req.body.joined_date).trim(),
     }
 
@@ -93,9 +95,10 @@ router.put("/member/update/:id", verify, async (req, res) => {
         $set: updateData
       }
     );
-    res.json(updatedMember);
+
+    res.json({ status: true, message: "updated" });
   } catch (err) {
-    res.json({ message: err.message });
+    res.json({ status: false, message: err.message });
   }
 });
 
