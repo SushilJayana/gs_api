@@ -10,7 +10,7 @@ const memberRoutes = require("./routes/r_member");
 const packageRoutes = require("./routes/r_package");
 const loginRoutes = require("./routes/r_login");
 
-const memRoutes = require("./routes/member/index");
+//const memRoutes = require("./routes/member/index");
 
 app.use(express.json());
 

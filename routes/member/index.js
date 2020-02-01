@@ -1,15 +1,10 @@
 'use strict';
 
-//const member = require("./member")
+const member_methods = require("./member_methods")
 
-import member from "./member"
-
-console.log("member index")
-
-const member_routes = 
-(app) => {
-
-    app.get("/member", member.getAll);
+const member_routes = (app) => {
+    app.get("/member", member_methods.getAll);
 }
+
 
 module.exports = member_routes;
