@@ -32,11 +32,11 @@ router.post("/member/add", verify, async (req, res) => {
     username: req.body.username
   });
 
+  if (isUsernameExist) return res.json({ message: "Username already exist" });
+  
   //Hash passwords
   const salt = await bcryptjs.genSalt(10);
   const hashPassword = await bcryptjs.hash((req.body.password).trim(), salt);
-
-  if (isUsernameExist) return res.json({ message: "Username already exist" });
 
   const member = new Member({
     username: (req.body.username).trim(),
