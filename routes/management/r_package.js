@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const Package = require("../models/Package");
+const Package = require("../../models/Package");
 
 //get a package by id
 router.get("/package/:id", async (req, res) => {

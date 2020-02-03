@@ -5,12 +5,10 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 
 //Import routes
-const tokenRoutes = require("./jwt/generateToken");
-const memberRoutes = require("./routes/r_member");
-const packageRoutes = require("./routes/r_package");
-const loginRoutes = require("./routes/r_login");
-
-//const memRoutes = require("./routes/member/index");
+// const tokenRoutes = require("./jwt/generateToken");
+// const memberRoutes = require("./routes/r_member");
+// const packageRoutes = require("./routes/r_package");
+// const loginRoutes = require("./routes/r_login");
 
 app.use(express.json());
 
@@ -28,14 +26,11 @@ mongoose.connect(
 app.use(cors({ origin: "*" }));
 
 //Route Middleware
+require("./routes")(app);
 // app.use("/api/gs", tokenRoutes);
 // app.use("/api/gs", loginRoutes);
 // app.use("/api/gs", memberRoutes);
 // app.use("/api/gs", packageRoutes);
-
-// app.use("/api",memRoutes);
-
-require("./routes")(app);
 
 app.listen(3005, () => {
   console.log("Connected gymsquare api at 3005");

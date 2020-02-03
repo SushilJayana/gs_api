@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const PackageType = require("../models/PackageType");
+const PackageType = require("../../models/PackageType");
 
 //get package type by id
 
