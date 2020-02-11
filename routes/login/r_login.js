@@ -1,10 +1,9 @@
-const router = require("express").Router();
-const verify = require("../../jwt/verifyToken");
+const verify = require("../jwt_token/jwt/verifyToken");
 const Member = require("../../models/Member");
 const { verifyLoginCredentials } = require("../../validation/v_login");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const randomToken = require("../../jwt/randToken");
+const randomToken = require("../jwt_token/jwt/randToken");
 
 //LOGIN USER
 

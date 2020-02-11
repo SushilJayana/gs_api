@@ -1,8 +1,8 @@
 
 const token = require("./generateToken");
 
-module.exports = (app)=>{
+module.exports = (app) => {
 
-    app.use("/gsapi/token",token.generateToken);    
+    app.use("/api/gs/token", token.generateToken);
 
 }
