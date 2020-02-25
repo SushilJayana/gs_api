@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const memberSchema = new mongoose.Schema({
+  _id: { type: String,auto:true,index:true },
   firstname: {
     type: String,
     required: true,

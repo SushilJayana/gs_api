@@ -28,37 +28,44 @@ module.exports = {
 
   //ADD MEMBER
   addMember: async (req, res) => {
-    const { error } = memberValidation(req.body);
-    if (error) return res.status(400).json(error.details[0].message);
-
-    const isUsernameExist = await Member.findOne({
-      username: req.body.username
-    });
-
-    if (isUsernameExist) return res.json({ message: "Username already exist" });
-
-    //Hash passwords
-    const salt = await bcryptjs.genSalt(10);
-    const hashPassword = await bcryptjs.hash((req.body.password).trim(), salt);
-
-    const member = new Member({
-      username: (req.body.username).trim(),
-      firstname: (req.body.firstname).trim(),
-      lastname: (req.body.lastname).trim(),
-      user_type: (req.body.user_type).trim(),
-      created_by: req.body.created_by,
-      password: hashPassword.trim(),
-      password_hash: salt
-    });
 
     try {
+
+      const { error } = memberValidation(req.body);
+      if (error) return res.status(200).json({ status: false, message: error.details[0].message });
+
+      const isUsernameExist = await Member.findOne({
+        username: req.body.username
+      });
+
+      if (isUsernameExist) return res.json({ status: false, message: "Username already exist" });
+
+      //Hash passwords
+      const salt = await bcryptjs.genSalt(10);
+      const hashPassword = await bcryptjs.hash((req.body.password).trim(), salt);
+
+      const member = new Member({
+        username: (req.body.username).trim(),
+        firstname: (req.body.firstname).trim(),
+        lastname: (req.body.lastname).trim(),
+        user_type: (req.body.user_type).trim(),
+        created_by: req.body.created_by,
+        password: hashPassword.trim(),
+        password_hash: salt
+      });
+
+
       const saveMember = await member.save();
       saveMember.password = null;
       saveMember.password_hash = null;
-      res.send(saveMember);
+
+      res.json({ status: true, payload: saveMember });
+
+
     } catch (err) {
-      res.json({ message: err.message });
+      res.json({ status: false, message: err.message });
     }
+
   },
 
   //UPDATE A MEMBER
@@ -74,7 +81,6 @@ module.exports = {
       }
 
       if (req.body.password) {
-
         //Hash passwords
         const salt = await bcryptjs.genSalt(10);
         const hashPassword = await bcryptjs.hash((req.body.password).trim(), salt);

@@ -13,12 +13,12 @@ module.exports = {
     try {
       const { error } = verifyLoginCredentials(req.body);
       if (error)
-        return res.status(400).json({ message: error.details[0].message });
+        return res.status(200).json({ message: error.details[0].message });
 
       const isUserExits = await Member.findOne({ username: req.body.username });
 
       if (!isUserExits || isUserExits == null)
-        return res.status(400).json({ message: "Username doesnot exist!!" });
+        return res.status(200).json({ message: "Username doesnot exist!!" });
 
       const validPassword = await bcrypt.compare(
         req.body.password,
@@ -30,7 +30,7 @@ module.exports = {
       // );
 
       if (!validPassword)
-        return res.status(400).json({ message: "Invalid Password!!" });
+        return res.status(200).json({ message: "Invalid Password!!" });
 
       //create and assign a token
       const token = jwt.sign(

@@ -1,5 +1,5 @@
-const router = require("express").Router();
 const PackageType = require("../../models/PackageType");
+var mongoose = require('mongoose');
 
 module.exports = {
     //get package type by id
@@ -25,19 +25,35 @@ module.exports = {
     //add a package_type`
     addPackageType: async (req, res) => {
         try {
+
+            res.send("sdf");
+            return;
             const isPackageTypeExist = await PackageType.findOne({
                 name: req.body.name
             });
 
             if (isPackageTypeExist) return res.json({ message: "Similar package type already exists" });
 
+
+            let obj = {
+                name: req.body.name,
+                type_identity: req.body.type_identity,
+                created_by: ObjectId(req.body.created_by).toString()
+            }
+
+            res.json(obj);
+
             const package_type = new PackageType({
                 name: req.body.name,
-                type_identity: req.body.type_identity
+                type_identity: req.body.type_identity,
+                created_by: ObjectId(req.body.created_by).toString()
             });
 
-        } catch (error) {
+            const savePackageType = await package_type.save();
+            res.send(savePackageType);
 
+        } catch (error) {
+            res.json({ message: error.message });
         }
     }
 }
