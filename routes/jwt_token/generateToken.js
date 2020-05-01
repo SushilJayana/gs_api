@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const randomToken = require("./jwt/randToken");
+const randomToken = require("./jwt/randomToken");
 
 module.exports = {
   generateToken :(req, res) => {
@@ -11,7 +11,9 @@ module.exports = {
         expiresIn: "20s"
       }
     );
-    res.header("auth-token", token).send({ token: token });
+
+    return token;
+ //   res.header("auth-token", token).send({ token: token });
   }
   
 }

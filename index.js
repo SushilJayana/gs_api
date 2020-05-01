@@ -28,10 +28,6 @@ app.use(cors({ origin: "*" }));
 
 //Route Middleware
 require("./routes")(app);
-// app.use("/api/gs", tokenRoutes);
-// app.use("/api/gs", loginRoutes);
-// app.use("/api/gs", memberRoutes);
-// app.use("/api/gs", packageRoutes);
 
 app.listen(3005, () => {
   console.log("Connected gymsquare api at 3005");

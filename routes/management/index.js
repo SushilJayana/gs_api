@@ -1,6 +1,6 @@
 const member = require("./r_member")
 const package = require("./r_package")
-const packageType = require("./r_package_type")
+const verify = require("../jwt_token/jwt/verifyToken")
 
 module.exports = (app) => {
 
@@ -13,10 +13,5 @@ module.exports = (app) => {
     app.get("/api/gs/package", package.getAllPackage);
     app.get("/api/gs/package/:id", package.getPackageById);
     app.post("/api/gs/package/add", package.addPackage);
-
-    app.get("/api/gs/package_type", packageType.getAllPackageType);
-    app.get("/api/gs/package_type/:id", packageType.getPackageTypeById);
-    app.post("/api/gs/package_type/add", packageType.addPackageType);
-
 }
 

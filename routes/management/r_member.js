@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const Member = require("../../models/Member");
 const { memberValidation } = require("../../validation/v_member");
-const verify = require("../jwt_token/jwt/verifyToken");
 const bcryptjs = require("bcryptjs");
 
 module.exports = {
@@ -12,7 +11,7 @@ module.exports = {
       const members = await Member.find().select('-password -password_hash');
       res.json(members);
     } catch (err) {
-      res.json({ message: err.message });
+      res.status(400).json({ message: err });
     }
   },
 
@@ -22,13 +21,12 @@ module.exports = {
       const member = await Member.findById(req.params.id).select('-password -password_hash');
       res.json(member);
     } catch (err) {
-      res.json({ message: err.message });
+      res.status(400).json({ message: err.message });
     }
   },
 
   //ADD MEMBER
   addMember: async (req, res) => {
-
     try {
 
       const { error } = memberValidation(req.body);
@@ -48,7 +46,7 @@ module.exports = {
         username: (req.body.username).trim(),
         firstname: (req.body.firstname).trim(),
         lastname: (req.body.lastname).trim(),
-        user_type: (req.body.user_type).trim(),
+        user_type: req.body.user_type,
         created_by: req.body.created_by,
         password: hashPassword.trim(),
         password_hash: salt
@@ -63,7 +61,7 @@ module.exports = {
 
 
     } catch (err) {
-      res.json({ status: false, message: err.message });
+      res.status(400).json({ status: false, message: err.message });
     }
 
   },
@@ -97,7 +95,7 @@ module.exports = {
 
       res.json({ status: true, message: "updated" });
     } catch (err) {
-      res.json({ status: false, message: err.message });
+      res.status(400).json({ status: false, message: err.message });
     }
   },
 
@@ -107,7 +105,7 @@ module.exports = {
       const removedMember = await Member.remove({ _id: req.params.id });
       res.json(removedMember);
     } catch (err) {
-      res.json({ message: err.message });
+      res.status(400).json({ message: err.message });
     }
   }
 

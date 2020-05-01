@@ -2,16 +2,16 @@ const verify = require("../jwt_token/jwt/verifyToken");
 const Member = require("../../models/Member");
 const { verifyLoginCredentials } = require("../../validation/v_login");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const randomToken = require("../jwt_token/jwt/randToken");
+const { generateToken } = require("../jwt_token/generateToken");
 
 //LOGIN USER
 
 module.exports = {
-  
   processLogin: async (req, res) => {
     try {
+
       const { error } = verifyLoginCredentials(req.body);
+
       if (error)
         return res.status(200).json({ message: error.details[0].message });
 
@@ -33,13 +33,7 @@ module.exports = {
         return res.status(200).json({ message: "Invalid Password!!" });
 
       //create and assign a token
-      const token = jwt.sign(
-        { _id: randomToken(5, null) },
-        process.env.TOKEN_SECRET,
-        {
-          expiresIn: "20s"
-        }
-      );
+      const token = generateToken();
 
       res.json({
         _id: isUserExits._id,
@@ -48,7 +42,7 @@ module.exports = {
         message: "authenticated"
       });
     } catch (err) {
-      res.json({ message: err.message });
+      res.json({ message: 'hey' + err.message });
     }
   }
 }
