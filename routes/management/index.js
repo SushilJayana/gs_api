@@ -4,14 +4,14 @@ const verify = require("../jwt_token/jwt/verifyToken")
 
 module.exports = (app) => {
 
-    app.get("/api/gs/member", member.getAllMember);
-    app.get("/api/gs/member/:id", member.getMemberByID);
-    app.post("/api/gs/member/add", member.addMember);
-    app.put("/api/gs/member/update/:id", member.updateMember);
-    app.delete("/api/gs/member/remove/:id", member.deleteMember);
+    app.get(process.env.API_URL_PREFIX + "/member", member.getAllMember);
+    app.get(process.env.API_URL_PREFIX + "/member/:id", member.getMemberByID);
+    app.post(process.env.API_URL_PREFIX + "/member/add", member.addMember);
+    app.put(process.env.API_URL_PREFIX + "/member/update/:id", member.updateMember);
+    app.delete(process.env.API_URL_PREFIX + "/member/remove/:id", member.deleteMember);
 
-    app.get("/api/gs/package", package.getAllPackage);
-    app.get("/api/gs/package/:id", package.getPackageById);
-    app.post("/api/gs/package/add", package.addPackage);
+    app.get(process.env.API_URL_PREFIX + "/package", package.getAllPackage);
+    app.get(process.env.API_URL_PREFIX + "/package/:id", package.getPackageById);
+    app.post(process.env.API_URL_PREFIX + "/package/add", package.addPackage);
 }
 

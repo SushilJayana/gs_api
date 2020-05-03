@@ -33,7 +33,7 @@ module.exports = {
         return res.status(200).json({ message: "Invalid Password!!" });
 
       //create and assign a token
-      const token = generateToken();
+      const token = generateToken(isUserExits._id);
 
       res.json({
         _id: isUserExits._id,

@@ -28,10 +28,18 @@ module.exports = {
   // Add a package
   addPackage: async (req, res) => {
     try {
-      const isPackageExist = await Package.findOne({name: req.body.name});
+      const isPackageExist = await Package.findOne({ name: req.body.name });
       if (isPackageExist) return res.json({ message: "Similar package already exist" })
-      
-      const package = new Package({name: req.body.name})
+
+      const package = new Package({
+        name: req.body.name,
+        price: req.body.price,
+        duration: req.body.duration,
+        discount: req.body.discount
+      });
+
+      const addPackage = await package.save();
+      res.json({ "status": "success", "payload": addPackage })
 
     } catch{
       res.status(400).json({ status: "error", message: err });

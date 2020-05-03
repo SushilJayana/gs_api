@@ -3,13 +3,6 @@ const app = express();
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
-var API_URL = "/gsapi";
-
-//Import routes
-// const tokenRoutes = require("./jwt/generateToken");
-// const memberRoutes = require("./routes/r_member");
-// const packageRoutes = require("./routes/r_package");
-// const loginRoutes = require("./routes/r_login");
 
 app.use(express.json());
 
