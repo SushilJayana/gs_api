@@ -18,7 +18,7 @@ const memberValidation = reqBody => {
       .required(),
     email: Joi.string().email(),
     user_type: Joi.number().required(),
-    created_by: Joi.number(),
+    created_by: Joi.string(),
     joined_date: Joi.date()
   });
 

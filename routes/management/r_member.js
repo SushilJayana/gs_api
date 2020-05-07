@@ -2,6 +2,7 @@ const router = require("express").Router();
 const Member = require("../../models/Member");
 const { memberValidation } = require("../../validation/v_member");
 const bcryptjs = require("bcryptjs");
+const mongoose = require("mongoose");
 
 module.exports = {
 
@@ -27,14 +28,14 @@ module.exports = {
 
   //ADD MEMBER
   addMember: async (req, res) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
     try {
 
       const { error } = memberValidation(req.body);
       if (error) return res.status(200).json({ status: false, message: error.details[0].message });
 
-      const isUsernameExist = await Member.findOne({
-        username: req.body.username
-      });
+      const isUsernameExist = await Member.findOne({ username: req.body.username });
 
       if (isUsernameExist) return res.json({ status: false, message: "Username already exist" });
 
@@ -42,7 +43,7 @@ module.exports = {
       const salt = await bcryptjs.genSalt(10);
       const hashPassword = await bcryptjs.hash((req.body.password).trim(), salt);
 
-      const member = new Member({
+      const member = [{
         username: (req.body.username).trim(),
         firstname: (req.body.firstname).trim(),
         lastname: (req.body.lastname).trim(),
@@ -50,18 +51,20 @@ module.exports = {
         created_by: req.body.created_by,
         password: hashPassword.trim(),
         password_hash: salt
-      });
+      }];
 
-
-      const saveMember = await member.save();
+      const saveMember = await Member.create(member, { session: session });
+      await session.commitTransaction();
       saveMember.password = null;
       saveMember.password_hash = null;
 
       res.json({ status: true, payload: saveMember });
 
-
     } catch (err) {
+      await session.abortTransaction();
       res.status(400).json({ status: false, message: err.message });
+    } finally {
+      session.endSession();
     }
 
   },

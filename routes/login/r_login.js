@@ -24,11 +24,7 @@ module.exports = {
         req.body.password,
         isUserExits.password
       );
-
-      // return res.send(
-      //   validPassword + " - " + req.body.password + " - " + isUserExits.password
-      // );
-
+      
       if (!validPassword)
         return res.status(200).json({ message: "Invalid Password!!" });
 

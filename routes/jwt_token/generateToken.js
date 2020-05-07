@@ -8,9 +8,9 @@ module.exports = {
     const token = jwt.sign(
       { _id: randomToken(key.length, key) },
       process.env.TOKEN_SECRET,
-      {
-        expiresIn: "60s"
-      }
+      // {
+      //   expiresIn: "60s"
+      // }
     );
 
     return token;
